@@ -6,12 +6,12 @@ import Link from 'next/link'
 export default async function DashboardPage() {
   const supabase = await createClient()
   
-  // Basic Counts
+  // 1. Basic Counts ගන්න
   const { count: studentCount } = await supabase.from('students').select('*', { count: 'exact', head: true })
   const { count: attendanceCount } = await supabase.from('attendance').select('*', { count: 'exact', head: true })
   const { count: feePending } = await supabase.from('fees').select('*', { count: 'exact', head: true }).eq('status', 'pending')
 
-  // ✅ New: This Month's Income Calculation
+  // 2. ✅ This Month's Income Calculate කරන්න
   const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
   const { data: monthlyFees } = await supabase
     .from('fees')
@@ -28,25 +28,53 @@ export default async function DashboardPage() {
         <p className="text-gray-500 mt-1">Welcome back! Here's an overview of your tuition classes.</p>
       </div>
 
-      {/* Stats Cards Grid - 4 Cards දැන් */}
+      {/* ✅ Stats Cards Grid - දැන් Cards 4ක් තියෙනවා (lg:grid-cols-4) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        {/* Card 1: Total Students */}
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-gray-500">Total Students</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{studentCount || 0}</div><p className="text-xs text-green-600 mt-1">Active learners</p></CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-500">Total Students</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{studentCount || 0}</div>
+            <p className="text-xs text-green-600 mt-1">Active learners</p>
+          </CardContent>
         </Card>
+
+        {/* Card 2: Attendance Records */}
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-gray-500">Attendance Records</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{attendanceCount || 0}</div><p className="text-xs text-blue-600 mt-1">Total marked sessions</p></CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-500">Attendance Records</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{attendanceCount || 0}</div>
+            <p className="text-xs text-blue-600 mt-1">Total marked sessions</p>
+          </CardContent>
         </Card>
+
+        {/* Card 3: Pending Fees */}
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-gray-500">Pending Fees</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">{feePending || 0}</div><p className="text-xs text-orange-600 mt-1">Invoices awaiting payment</p></CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-500">Pending Fees</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{feePending || 0}</div>
+            <p className="text-xs text-orange-600 mt-1">Invoices awaiting payment</p>
+          </CardContent>
         </Card>
-        {/* ✅ New Income Card */}
+
+        {/* ✅ Card 4: This Month's Income (අලුත් Card එක) */}
         <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-gray-500">This Month's Income</CardTitle></CardHeader>
-          <CardContent><div className="text-3xl font-bold">Rs. {totalIncome.toLocaleString()}</div><p className="text-xs text-emerald-600 mt-1">Collected fees</p></CardContent>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-500">This Month's Income</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">Rs. {totalIncome.toLocaleString()}</div>
+            <p className="text-xs text-emerald-600 mt-1">Collected fees</p>
+          </CardContent>
         </Card>
+
       </div>
 
       {/* Quick Actions Section */}
