@@ -24,6 +24,10 @@ const buttonVariants = cva(
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        // ✅ Missing sizes add කරලා (dialog, sheet, toast වලට ඕනේ)
+        "icon-sm": "h-8 w-8", 
+        "icon-xs": "h-6 w-6",
+        "icon-lg": "h-12 w-12",
       },
     },
     defaultVariants: {
